@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="max-age=300" />
+	<title>ES商品搜索 - 京东</title>
+
+	<link type="text/css" rel="stylesheet" href="css/jd.css">
+	<link type="text/css" rel="stylesheet" href="css/search.css">
+	<script type="text/javascript" src="js/es5-shim.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/vue.min.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<!--shortcut end-->
+		<div class="w">
+			<div id="logo-2014">
+				<a href="http://www.jd.com/" class="logo">京东</a>
+			</div>
+			<div id="search-2014">
+				<ul id="shelper" class="hide"></ul>
+				<div class="form">
+					<input v-model="keyword" type="text" id="key" class="text" />
+					<button @click.prevent="searchKey()" class="button cw-icon">搜索</button>
+				</div>
+			</div>
+			<div id="settleup-2014" class="dorpdown">
+				<div class="cw-icon">
+					<i class="iconfont">&#xe607;</i>
+					<i class="iconfont arrow">&#xe601;</i>
+					<a target="_blank" href="http://cart.jd.com/cart.action">我的购物车</a>
+				</div>
+				<div class="dorpdown-layer">
+					<div class="spacer"></div>
+					<div id="settleup-content">
+						<span class="loading"></span>
+					</div>
+				</div>
+			</div>
+			<div id="hotwords"></div>
+			<span class="clr"></span>
+		</div>
+		<!--nav start-->
+		<div id="nav-2014">
+			<div class="w">
+				<div class="w-spacer"></div>
+				<div id="categorys-2014" class="dorpdown" data-type="default">
+					<div class="dt">
+						<a target="_blank" href="http://www.jd.com/allSort.aspx">全部商品分类</a>
+					</div>
+				</div>
+				<div id="navitems-2014">
+					<ul id="navitems-group1">
+						<li clstag="" id="nav-fashion" class="fore1">
+							<a class="b" target="_blank" href="http://channel.jd.com/fashion.html">京东时尚</a>
+						</li>
+						<li clstag="" id="nav-beauty" class="fore2">
+							<a class="b" target="_blank" href="http://channel.jd.com/beautysale.html">美妆馆</a>
+						</li>
+						<li clstag="" id="nav-chaoshi" class="fore3">
+							<a class="b" target="_blank" href="http://channel.jd.com/chaoshi.html">超市</a>
+						</li>
+						<li clstag="" id="nav-fresh" class="fore4">
+							<a class="b" target="_blank" href="http://fresh.jd.com">生鲜</a>
+						</li>
+					</ul>
+					<div class="spacer"></div>
+					<ul id="navitems-group2">
+						<li clstag="" id="nav-jdww" class="fore1">
+							<a class="b" target="_blank" href="http://www.jd.hk/">京东国际</a>
+						</li>
+						<li clstag="" id="nav-red" class="fore2">
+							<a class="b" target="_blank" href="http://red.jd.com/">闪购</a>
+						</li>
+						<li clstag="" id="nav-auction" class="fore3">
+							<a class="b" target="_blank" href="http://paimai.jd.com/">拍卖</a>
+						</li>
+					</ul>
+					<div class="spacer"></div>
+					<ul id="navitems-group3">
+						<li clstag="" id="nav-jdjr" class="fore1">
+							<a class="b" target="_blank" href="http://jr.jd.com/">金融</a>
+						</li>
+					</ul>
+				</div>
+				<div id="treasure"></div>
+				<span class="clr"></span>
+			</div>
+		</div>
+		<div id="J_searchWrap" class="w">
+			<div id="J_container" class="container">
+				<div id="J_main" class="g-main2">
+					<div class="m-list">
+						<div class="ml-wrap">
+							<div id="J_filter" class="filter">
+								<div class="f-line top">
+									<div class="f-sort">
+										<a class="curr" href="javascript:;"><span class="fs-tit">综合</span><em
+												class="fs-down"><i class="arrow"></i></em></a>
+										<a class="" href="javascript:;"><span class="fs-tit">销量</span><em
+												class="fs-down"><i class="arrow"></i></em></a>
+										<a class="" href="javascript:;"><span class="fs-tit">评论数</span><em
+												class="fs-down"><i class="arrow"></i></em></a>
+										<a class="" href="javascript:;"><span class="fs-tit">新品</span><em
+												class="fs-down"><i class="arrow"></i></em></a>
+										<a class="" href="javascript:;"><span class="fs-tit">价格</span><em
+												class="fs-up"><i class="arrow-top"></i><i
+													class="arrow-bottom"></i></em></a>
+									</div>
+									<div id="J_topPage" class="f-pager">
+										<span class="fp-text">
+											<b>1</b><em>/</em><i>100</i>
+										</span>
+										<a class="fp-prev disabled" href="javascript:;">&lt;</a>
+										<a class="fp-next" href="javascript:;">&gt;</a>
+									</div>
+									<div class="f-result-sum">共<span id="J_resCount" class="num">11万+</span>件商品</div>
+									<span class="clr"></span>
+								</div>
+							</div>
+							<div id="J_goodsList" class="goods-list-v2 gl-type-1 J-goods-list">
+								<ul class="gl-warp clearfix" data-tpl="1">
+									<li v-for="result in results" data-sku="12555860" data-spu="12555860" ware-type="11" class="gl-item">
+										<div class="gl-i-wrap">
+											<div class="p-img">
+												<a target="_blank" title="Java从入门到精通（第5版）">
+													<img width="220" height="220" data-img="1" :src="result.imgUrl"
+														data-lazy-img="done" source-data-lazy-img="">
+													<div id="belt" class="p-act-sign J_belt_box sign-2017083101"
+														style="background-image: url('https://img30.360buyimg.com/jgsq-productsoa/jfs/t16951/182/417192066/4728/322919ee/5a754dd7N2f64533f.png');">
+														<div class="sign-title ac">自营每满100减50
+															<span class="sign-date">7.6-7.9</span>
+														</div>
+													</div>
+												</a>
+
+												<div data-lease="" data-catid="3797" data-venid="1000004111"
+													data-presale="0" data-done="1"></div>
+											</div>
+
+											<div class="p-price">
+												<strong class="J_12555860" data-done="1">
+													<em>￥</em><i>{{result.price}}</i>
+												</strong>
+											</div>
+											<div class="p-name p-name-type-2">
+												<span v-html="result.title">西安电子科技大学哈哈哈哈哈</span>
+											</div>
+											<div class="p-shop" data-dongdong="" data-selfware="1" data-score="5"
+												data-reputation="98" data-done="1">
+												<span class="J_im_icon">
+													<a target="_blank" class="curr-shop hd-shopname"
+														title="清华大学出版社">{{result.publisher}}</a>
+												</span>
+											</div>
+											<div class="p-icons" id="J_pro_12555860" data-done="1">
+												<i class="goods-icons J-picon-tips J-picon-fix" data-idx="1"
+													data-tips="京东自营，品质保障">自营</i>
+												<i class="goods-icons4 J-picon-tips"
+													style="border-color:#4d88ff;color:#4d88ff;" data-idx="1"
+													data-tips="品质服务，放心购物">放心购</i>
+											</div>
+										</div>
+									</li>
+								</ul>
+								<span class="clr"></span>
+							</div>
+							<div class="page clearfix">
+								<div id="J_bottomPage" class="p-wrap">
+									<span class="p-num">
+										<a class="pn-prev disabled"><i>&lt;</i><em>上一页</em></a>
+										<a href="javascript:;" class="curr">1</a>
+										<a onclick="SEARCH.page(3, true)" href="javascript:;">2</a>
+										<a onclick="SEARCH.page(5, true)" href="javascript:;">3</a>
+										<a onclick="SEARCH.page(7, true)" href="javascript:;">4</a>
+										<a onclick="SEARCH.page(9, true)" href="javascript:;">5</a>
+										<a onclick="SEARCH.page(11, true)" href="javascript:;">6</a>
+										<a onclick="SEARCH.page(13, true)" href="javascript:;">7</a>
+										<b class="pn-break">...</b>
+										<a class="pn-next" onclick="SEARCH.page(3, true)" href="javascript:;"
+											title="使用方向键右键也可翻到下一页哦！"><em>下一页</em><i>&gt;</i></a>
+									</span>
+									<span class="p-skip"><em>共<b>100</b>页&nbsp;&nbsp;到第</em>
+										<input class="input-txt" type="text" value="1"
+											onkeydown="javascript:if(event.keyCode==13){SEARCH.page_jump(100,1);return false;}"><em>页</em>
+										<a class="btn btn-default" onclick="SEARCH.page_jump(100,1)"
+											href="javascript:;">确定</a>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<span class="clr"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				keyword: '',
+				results: []
+			},
+			methods: {
+				searchKey() {
+					let keyword = this.keyword;
+					console.log(keyword);
+					axios.get('http://localhost:8080/search/' + keyword + "/1/100").then(response => {
+						console.log(response);
+						this.results = response.data;
+					})
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>
